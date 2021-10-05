@@ -9,30 +9,6 @@ import tweets
 from flask import request
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@localhost:3306/flaskcrud'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-
-db_connection = mysql.connector.connect(
-    host="localhost",
-    user='root',
-    password='root',
-    port=3306
-)
-
-
-class Data(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(100))
-    phone = db.Column(db.String(100))
-
-    def __init__(self, id, name, email, phone):
-        self.id = id
-        self.name = name
-        self.email = email
-        self.phone = phone
 
 
 def get_videos(channelid, maxResults, key, part,):
