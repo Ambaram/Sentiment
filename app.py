@@ -12,24 +12,6 @@ import flask
 app = Flask(__name__)
 
 
-def get_videos(channelid, maxResults, key, part,):
-    url = "https://youtube.googleapis.com/youtube/v3/playlists"
-    parameters = {
-        "channelId": channelid,
-        "maxResults": maxResults,
-        "key": key,
-        "part": part
-    }
-
-    headers = {
-        'Accept': 'Application/json',
-    }
-    session = Session()
-    session.headers.update(headers)
-    response = session.get(url, params=parameters)
-    return response
-
-
 @app.route('/', methods=['POST'])
 def search():
     search = request.form.get("search")
