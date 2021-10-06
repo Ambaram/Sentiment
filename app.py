@@ -7,6 +7,7 @@ from requests.sessions import Session
 import json
 import tweets
 from flask import request
+import flask
 
 app = Flask(__name__)
 
@@ -30,33 +31,30 @@ def get_videos(channelid, maxResults, key, part,):
 
 
 @app.route('/', methods=['POST'])
-def tweet():
-    data = get_videos("UCoG2o8WtvYh8sCS40pUFtCg", 25,
-                      "AIzaSyDwfhqAFIS2-H8lboqAyOd0zAT2Jazuf24", "snippet")
-    response = json.loads(data.text)
-
-    def search():
-        search = request.form.get('search')
-        return search
+def search():
+    search = request.form.get("search")
     tweet = Tweets(search)
     tweetdata = tweet.get_tweet()
     tweetdict = tweetdata.to_dict(orient='records')
-    return render_template('tweets.html', response=response, tweetdata=tweetdict)
+    return render_template('index.html', tweetdata=tweetdict)
+
+
+@app.route('/', methods=['POST'])
+def tweet():
+    tweet = Tweets("microsoft")
+    tweetdata = tweet.get_tweet()
+    tweetdict = tweetdata.to_dict(orient='records')
+    return render_template('tweets.html', tweetdata=tweetdict)
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    data = get_videos("UCoG2o8WtvYh8sCS40pUFtCg", 25,
-                      "AIzaSyDwfhqAFIS2-H8lboqAyOd0zAT2Jazuf24", "snippet")
-    response = json.loads(data.text)
-
-    def search():
-        search = request.form.get('search')
-        return search
     tweet = Tweets("microsoft")
     tweetdata = tweet.get_tweet()
     tweetdict = tweetdata.to_dict(orient='records')
-    return render_template('index.html', response=response, tweetdata=tweetdict)
+    response = render_template(
+        'index.html', tweetdata=tweetdict)
+    return response
 
 
 if __name__ == "__main__":

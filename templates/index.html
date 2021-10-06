@@ -1,96 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" 
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Content-Security-Policy" content="frame-src https://www.youtube.com/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/static/images/favicon.jpeg" type="image/png" sizes="32*32">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-    <title>Document</title>
+  <title>TakeCare</title>
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#">TakeCare</a>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 float-right">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </nav>
-    </header>
-    <main class="jumbotron">
-      {% block body %}
-      <div>
-        <h1>Learn to Meditate</h1>
-        {% block content %}
-        <div class="row">
-        {% for video in range(response|length) %}
-        <div class="col-sm-4">
-          <iframe src={{ response['items'] }} title={{ response['items'][video]['snippet']['title'] }}></iframe>
+
+<body class="bg-info">
+  <header>
+    <nav>
+      <div class="container-fluid mb-4">
+        <div class="row justify-content-center">
+          <div class="mx-4 col-sm-2 my-auto">
+            <a class="text-light btn btn-primary" href="#">Home</a>
         </div>
-        {% endfor %}
+        <img src="../static/images/favicon2.jpeg" alt="logo" class="w-10 m-0 col-sm-2 bg-light rounded-circle">
+        <div class="mx-4 col-sm-2 my-auto">
+          <a class="text-light btn btn-success" href="https://www.ambaram.info">Developer Info</a>
       </div>
-        {% endblock %}
+        </div>
+    </nav>
+  </header>
+  <main class="container">
+    {% block body %}
+    <div class="container bg-info" id="sentiment">
+      <div class="row d-flex flex-row justify-content-center">
+        <div class="col-sm-3 my-auto justify-content-start">
+          <h1 class="h4">Tweet Sentiment Analysis</h1>
+          <form action="/" method="POST">
+            <input type="text" placeholder="search" class="bg-light p-2 border border-nonw" name="search">
+            <input type="submit" class="btn btn-secondary" value="search">
+          </form>
+          <img src="../static/images/twitter.png" class="w-100 justify-ceontent-start">
+        </div>
+        <div class="col-sm-7">
+          <div class="row d-flex flex-row mx-auto">
+            {% for tweet in range(tweetdata|length) %}
+            {% if 'Positive' in tweetdata[tweet]['Sentiment'] %}
+            <div class="col-sm-5 m-2 p-2 border border-success ">
+              <p>
+              <p>Tweet: </p>
+              {{ tweetdata[tweet]['Tweets'] }}
+              </p>
+              <p>Sentiment: </p>
+              <p class="bg-success text-center col-sm-5 p-2">
+                {{ tweetdata[tweet]['Sentiment'] }} &#128512;
+              </p>
+            </div>
+            {% elif 'Neutral' in tweetdata[tweet]['Sentiment'] %}
+            <div class="col-sm-5 m-2 p-2 border border-secondary">
+              <p>
+              <p>Tweet: </p>
+              {{ tweetdata[tweet]['Tweets'] }}
+              </p>
+              <p>Sentiment: </p>
+              <p class="bg-secondary text-center col-sm-5 p-2">
+                {{ tweetdata[tweet]['Sentiment'] }} &#128528;
+              </p>
+            </div>
+            {% else %}
+            <div class="col-sm-5 m-2 p-2 border border-danger">
+              <p>
+              <p>Tweet: </p>
+              {{ tweetdata[tweet]['Tweets'] }}
+              </p>
+              <p>Sentiment: </p>
+              <p class="text-center col-sm-5 bg-danger p-2">
+                {{ tweetdata[tweet]['Sentiment'] }} &#128542;
+              </p>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
       </div>
-      <div class="container">
-        <h1>Tweet Sentiment</h1>
-        <form action="" method="POST">
-          <input type="text" placeholder="search" name="search">
-          <input type="submit" class="btn btn-border-info" value="search">
-        </form>
-        <div class="row d-flex flex-row">
-        {% for tweet in range(tweetdata|length) %}
-        {% if 'Positive' in tweetdata[tweet]['Sentiment'] %}
-        <div class="col-sm-3 m-5 p-2 border border-success ">
-          <p>
-            <p>Tweet: </p>
-            {{ tweetdata[tweet]['Tweets'] }}
-          </p>
-            <p>Sentiment: </p>
-            <p class="bg-success text-center col-sm-4">
-            {{ tweetdata[tweet]['Sentiment'] }}
-          </p>
-      </div>
-      {% elif 'Neutral' in tweetdata[tweet]['Sentiment'] %}
-      <div class="col-sm-3 m-5 p-2 border border-secondary">
-        <p>
-          <p>Tweet: </p>
-          {{ tweetdata[tweet]['Tweets'] }}
-        </p>
-          <p>Sentiment: </p>
-          <p class="bg-secondary text-center col-sm-4">
-          {{ tweetdata[tweet]['Sentiment'] }}
-        </p>
-      </div>
-      {% else %}
-      <div class="col-sm-3 m-5 p-2 border border-danger">
-        <p>
-          <p>Tweet: </p>
-          {{ tweetdata[tweet]['Tweets'] }}
-        </p>
-          <p>Sentiment: </p>
-          <p class="text-center col-sm-4 bg-danger">
-          {{ tweetdata[tweet]['Sentiment'] }}
-        </p>
-      </div>
-      {% endif %}
-        {% endfor %}
-      </div>
-      </div>
-      <div>
-        <h1>Events</h1>
-      </div> 
-    </main>
-    {% endblock %}
+    </div>
+  </main>
+  {% endblock %}
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" 
-integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
 </html>
